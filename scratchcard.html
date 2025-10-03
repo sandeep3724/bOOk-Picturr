@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scratch & Win - bOOk Picturr</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px rgba(255,255,255,0.4);
+    }
+
+    .scratch-container {
+      width: 320px;
+      height: 180px;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+      margin-bottom: 2rem;
+      animation: glow 2s infinite alternate;
+    }
+
+    .vibrate {
+      animation: vibrate 0.1s infinite;
+    }
+
+    @keyframes vibrate {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      20% { transform: translate(-1px, -2px) rotate(-1deg); }
+      40% { transform: translate(-3px, 0px) rotate(1deg); }
+      60% { transform: translate(3px, 2px) rotate(0deg); }
+      80% { transform: translate(1px, -1px) rotate(1deg); }
+      100% { transform: translate(-1px, 2px) rotate(-1deg); }
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px rgba(255,215,0,0.4); }
+      to { box-shadow: 0 0 25px rgba(255,215,0,0.9); }
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .btn-home {
+      background: linear-gradient(90deg, #0d6efd, #6610f2);
+      border: none;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .btn-home:hover {
+      background: linear-gradient(90deg, #6610f2, #0d6efd);
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🎉 Congratulations!</h2>
+  <p>TAP ANYWHERE🎁</p>
+
+  <div class="scratch-container vibrate" id="scratchCard">
+    <canvas id="scratchCanvas" width="320" height="180"></canvas>
+    <div id="offerText" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.5rem;font-weight:bold;color:#000;opacity:0;">
+      complimentary gift.. 🍿
+    </div>
+  </div>
+
+  <a href="ticket.html" class="btn-home">🎟️ View Ticket</a>
+
+  <script>
+    const canvas = document.getElementById("scratchCanvas");
+    const ctx = canvas.getContext("2d");
+    const offerText = document.getElementById("offerText");
+    const scratchCard = document.getElementById("scratchCard");
+
+    // Yellow cover
+    ctx.fillStyle = "#FFD700";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = 'destination-out';
+
+    let isDrawing = false;
+    let unlocked = false;
+
+    canvas.addEventListener("mousedown", () => isDrawing = true);
+    canvas.addEventListener("mouseup", () => { isDrawing = false; checkReveal(); });
+    canvas.addEventListener("mousemove", scratch);
+
+    canvas.addEventListener("touchstart", () => isDrawing = true);
+    canvas.addEventListener("touchend", () => { isDrawing = false; checkReveal(); });
+    canvas.addEventListener("touchmove", scratch);
+
+    function scratch(e) {
+      if (!isDrawing || unlocked) return;
+      e.preventDefault();
+      let x, y;
+      if (e.touches) {
+        const rect = canvas.getBoundingClientRect();
+        x = e.touches[0].clientX - rect.left;
+        y = e.touches[0].clientY - rect.top;
+      } else {
+        x = e.offsetX;
+        y = e.offsetY;
+      }
+      ctx.beginPath();
+      ctx.arc(x, y, 20, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function unlockCard() {
+      if (unlocked) return;
+      unlocked = true;
+      offerText.style.opacity = 1;
+
+      // celebration 🎉
+      confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+      confetti({ particleCount: 150, spread: 120, origin: { y: 0.6 } });
+
+      scratchCard.classList.remove("vibrate");
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // remove cover
+    }
+
+    function checkReveal() {
+      if (unlocked) return;
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      let total = imageData.data.length / 4;
+      let transparent = 0;
+
+      for (let i = 3; i < imageData.data.length; i += 4) {
+        if (imageData.data[i] === 0) transparent++;
+      }
+
+      let percent = (transparent / total) * 100;
+      if (percent > 40) {
+        unlockCard();
+      }
+    }
+
+    // ✅ Unlock instantly when user taps anywhere on card
+    scratchCard.addEventListener("click", unlockCard);
+  </script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bOOk Picturr</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(90deg, #0d6efd, #6610f2);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    .navbar-brand span {
+      font-weight: bold;
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+    .navbar-brand:hover {
+      text-shadow: 0 0 8px #ffc107;
+    }
+    .nav-link {
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+    .nav-link:hover {
+      color: #ffc107 !important;
+      text-shadow: 0 0 8px rgba(255,193,7,0.8);
+    }
+
+    /* Search Bar */
+    #searchInput {
+      border-radius: 25px;
+      padding: 0.6rem 1.2rem;
+      border: 2px solid transparent;
+      transition: 0.3s;
+    }
+    #searchInput:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 12px rgba(13,110,253,0.8);
+      outline: none;
+    }
+
+    /* Section Heading */
+    h2 {
+      color: #ffc107;
+      text-shadow: 0 0 10px rgba(255,193,7,0.8);
+      animation: fadeInDown 1s ease;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Movie Cards */
+    .movie-card .card {
+      border: none;
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .movie-card .card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
+    .card-img-top {
+      height: 380px;
+      object-fit: cover;
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+    }
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ffc107;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: linear-gradient(45deg, #0d6efd, #6610f2);
+      border: none;
+      border-radius: 30px;
+      transition: transform 0.2s, box-shadow 0.3s;
+      font-weight: 500;
+    }
+    .btn-primary:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      background: linear-gradient(45deg, #6610f2, #0d6efd);
+    }
+
+    /* Movie Grid */
+    #movieList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* No Results */
+    #noResults {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+      <img src="img/logo.png" alt="bOOk Picturr Logo" width="40" height="40" class="me-2">
+      <span>bOOk Picturr</span>
+    </a>
+
+    <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link text-light" href="details.html">ShowTimings</a></li>
+        <li class="nav-item"><a class="nav-link text-light" href="contact.html">ContactUs</a></li>
+      </ul>
+
+      <!-- Search Bar -->
+      <form class="d-flex ms-3">
+        <input id="searchInput" class="form-control" type="search" placeholder="Search Movies..." aria-label="Search">
+      </form>
+    </div>
+  </div>
+</nav>
+
+<!-- Movie Cards -->
+<div class="container my-5">
+  <h2 class="mb-4 fw-bold text-center">🎬 Recommended Movies..</h2>
+  <div class="row g-4" id="movieList">
+    
+    <!-- Movie 1 -->
+    <div class="col-md-3 movie-card">
+      <div class="card">
+        <img src="img/baahubali.jpg" class="card-img-top" alt="Bahubali Poster">
+        <div class="card-body text-center">
+          <h5 class="card-title">Bahubali</h5>
+          <a href="details.html" onclick="setMovie('Bahubali')" class="btn btn-primary w-10">Book Now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie 2 -->
+    <div class="col-md-3 movie-card">
+      <div class="card">
+        <img src="img/rrr.png" class="card-img-top" alt="RRR Poster">
+        <div class="card-body text-center">
+          <h5 class="card-title">RRR</h5>
+          <a href="details.html" onclick="setMovie('RRR')" class="btn btn-primary w-10">Book Now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie 3 -->
+    <div class="col-md-3 movie-card">
+      <div class="card">
+        <img src="img/pp.png" class="card-img-top" alt="Pushpa Poster">
+        <div class="card-body text-center">
+          <h5 class="card-title">Pushpa</h5>
+          <a href="details.html" onclick="setMovie('Pushpa')" class="btn btn-primary w-10">Book Now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie 4 -->
+    <div class="col-md-3 movie-card">
+      <div class="card">
+        <img src="img/mirai.jpeg" class="card-img-top" alt="Mirai Poster">
+        <div class="card-body text-center">
+          <h5 class="card-title">Mirai</h5>
+          <a href="details.html" onclick="setMovie('Mirai')" class="btn btn-primary w-10">Book Now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie 5 -->
+    <div class="col-md-3 movie-card">
+      <div class="card">
+        <img src="img/a aa.jpg" class="card-img-top" alt="A aa Poster">
+        <div class="card-body text-center">
+          <h5 class="card-title">A aa</h5>
+          <a href="details.html" onclick="setMovie('A aa')" class="btn btn-primary w-10">Book Now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie 6 -->
+    <div class="col-md-3 movie-card">
+      <div class="card">
+        <img src="img/ismart shankar.jpg" class="card-img-top" alt="Ismart Shankar Poster">
+        <div class="card-body text-center">
+          <h5 class="card-title">Ismart Shankar</h5>
+          <a href="details.html" onclick="setMovie('Ismart Shankar')" class="btn btn-primary w-10">Book Now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Movie 7 -->
+    <div class="col-md-3 movie-card">
+      <div class="card">
+        <img src="img/kanchana.jpg" class="card-img-top" alt="kanchana Poster">
+        <div class="card-body text-center">
+          <h5 class="card-title">kanchana</h5>
+          <a href="details.html" onclick="setMovie('kanchana')" class="btn btn-primary w-10">Book Now</a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Movie 8 -->
+    <div class="col-md-3 movie-card">
+      <div class="card">
+        <img src="img/devara.webp" class="card-img-top" alt="Devara Poster">
+        <div class="card-body text-center">
+          <h5 class="card-title">Devara</h5>
+          <a href="details.html" onclick="setMovie('Devara')" class="btn btn-primary w-10">Book Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results Message -->
+  <p id="noResults" class="text-center mt-4" style="display:none;">No movies found..</p>
+</div>
+
+<!-- JS -->
+<script>
+  function setMovie(movie) {
+    localStorage.setItem("movieName", movie);
+  }
+
+  document.getElementById("searchInput").addEventListener("keyup", function() {
+    let filter = this.value.trim().toLowerCase();
+    let movies = document.querySelectorAll(".movie-card");
+    let noResults = document.getElementById("noResults");
+    let visibleCount = 0;
+
+    movies.forEach(movie => {
+      let title = movie.querySelector(".card-title").innerText.toLowerCase();
+      let alt = movie.querySelector("img").alt.toLowerCase();
+      if (title.includes(filter) || alt.includes(filter)) {
+        movie.style.display = "";
+        visibleCount++;
+      } else {
+        movie.style.display = "none";
+      }
+    });
+
+    noResults.style.display = visibleCount === 0 ? "block" : "none";
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
