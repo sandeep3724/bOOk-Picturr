@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Booking - bOOk Pictrr</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(90deg, #0d6efd, #6610f2);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 1.4rem;
+      color: #fff !important;
+    }
+    .navbar-brand:hover {
+      text-shadow: 0 0 8px #ffc107;
+    }
+
+    /* Back Button */
+    #backBtnContainer .btn {
+      border-radius: 30px;
+      font-weight: 500;
+      border: 2px solid #ffc107;
+      color: #ffc107;
+      transition: 0.3s;
+    }
+    #backBtnContainer .btn:hover {
+      background: #ffc107;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255,193,7,0.8);
+    }
+
+    /* Card */
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    }
+    .card p {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+    .card strong {
+      color: #ffc107;
+    }
+
+    /* Confirm Button */
+    .btn-success {
+      border-radius: 30px;
+      font-weight: 600;
+      padding: 0.7rem 2rem;
+      background: linear-gradient(45deg, #28a745, #218838);
+      border: none;
+      transition: 0.3s;
+    }
+    .btn-success:hover {
+      background: linear-gradient(45deg, #218838, #1e7e34);
+      transform: scale(1.07);
+      box-shadow: 0 0 15px rgba(40,167,69,0.8);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">🎬 bOOk Picturr</a>
+  </div>
+</nav>
+
+<!-- Back Button -->
+<div class="container my-3" id="backBtnContainer" style="display:none;">
+  <button class="btn" onclick="history.back()">← Back</button>
+</div>
+
+<div class="container text-center my-5">
+  <h2 class="mb-4 text-warning">Confirm Your Booking</h2>
+
+  <div class="card p-4 shadow-lg w-25 mx-auto">
+    <p><strong>🎬 Movie:</strong> <span id="movie">—</span></p>
+    <p><strong>🏢 Theatre:</strong> <span id="theatre">—</span></p>
+    <p><strong>📅 Date:</strong> <span id="date">—</span></p>
+    <p><strong>⏰ Showtime:</strong> <span id="time">—</span></p>
+    <p><strong>💺 Seats:</strong> <span id="seats">—</span></p>
+    <p><strong>💰 Amount:</strong> ₹<span id="amount">—</span></p>
+    <button onclick="proceedToPayment()" class="btn btn-success btn-lg mt-3">Proceed </button>
+  </div>
+</div>
+
+<script>
+  // Show back button on all pages except index.html
+  if (!window.location.pathname.endsWith("index.html")) {
+    document.getElementById("backBtnContainer").style.display = "block";
+  }
+
+  // ✅ Get values from localStorage
+  const movie   = localStorage.getItem("movieName") || "Not Selected";
+  const theatre = localStorage.getItem("theatre") || "Not Selected";
+  const date    = localStorage.getItem("date") || "Not Selected";
+  const time    = localStorage.getItem("time") || "Not Selected";
+  const seats   = localStorage.getItem("seats") || "Not Selected";
+  const amount  = localStorage.getItem("totalPrice") || "0";
+
+  // ✅ Insert into DOM
+  document.getElementById("movie").innerText   = movie;
+  document.getElementById("theatre").innerText = theatre;
+  document.getElementById("date").innerText    = date;
+  document.getElementById("time").innerText    = time;
+  document.getElementById("seats").innerText   = seats;
+  document.getElementById("amount").innerText  = amount;
+
+  // ✅ Redirect to payment
+  function proceedToPayment() {
+    window.location.href = "payment.html";
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

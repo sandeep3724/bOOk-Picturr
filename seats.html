@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Select Seats - bOOk Picturr</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(90deg, #0d6efd, #6610f2);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 1.4rem;
+      color: #fff !important;
+    }
+    .navbar-brand:hover {
+      text-shadow: 0 0 8px #ffc107;
+    }
+
+    /* Back Button */
+    #backBtnContainer .btn {
+      border-radius: 30px;
+      font-weight: 500;
+      border: 2px solid #ffc107;
+      color: #ffc107;
+      transition: 0.3s;
+    }
+    #backBtnContainer .btn:hover {
+      background: #ffc107;
+      color: #000;
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255,193,7,0.8);
+    }
+
+    /* Date Picker */
+    #showDate {
+      border-radius: 25px;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    /* Screen */
+    .screen {
+      background: linear-gradient(90deg, #6c757d, #adb5bd);
+      color: #000;
+      height: 45px;
+      margin: 20px auto;
+      width: 80%;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 45px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.5);
+    }
+
+    /* Seats */
+    .seat {
+      width: 38px;
+      height: 38px;
+      margin: 5px;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #fff;
+      backdrop-filter: blur(6px);
+    }
+    .seat:hover:not(.occupied):not(.selected) {
+      background: #ffc107;
+      color: #000;
+      transform: scale(1.1);
+      box-shadow: 0 0 12px rgba(255,193,7,0.9);
+    }
+    .seat.selected {
+      background: #28a745;
+      border-color: #28a745;
+      box-shadow: 0 0 10px rgba(40,167,69,0.8);
+      color: #fff;
+    }
+    .seat.occupied {
+      background: #6c757d;
+      color: #fff;
+      border: 2px solid #444;
+      cursor: not-allowed;
+    }
+
+    /* Legend */
+    .legend span {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      border-radius: 3px;
+    }
+    .available-box { background-color: rgba(255,255,255,0.2); }
+    .selected-box  { background-color: #28a745; }
+    .occupied-box  { background-color: #6c757d; }
+
+    /* Confirm Button */
+    .btn-success {
+      border-radius: 30px;
+      font-weight: 600;
+      padding: 0.7rem 2rem;
+      background: linear-gradient(45deg, #28a745, #218838);
+      border: none;
+      transition: 0.3s;
+    }
+    .btn-success:hover {
+      background: linear-gradient(45deg, #218838, #1e7e34);
+      transform: scale(1.07);
+      box-shadow: 0 0 15px rgba(40,167,69,0.8);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">🎬 bOOk Picturr</a>
+  </div>
+</nav>
+
+<!-- Back Button -->
+<div class="container my-3" id="backBtnContainer" style="display:none;">
+  <button class="btn" onclick="history.back()">← Back</button>
+</div>
+
+<!-- Date Selection -->
+<div class="container my-4 text-center">
+  <label for="showDate" class="form-label fw-bold text-warning">Select Date:</label>
+  <input type="date" id="showDate" class="form-control w-50 mx-auto" required>
+</div>
+
+<!-- Booking Section -->
+<div class="container my-5 text-center">
+  <h2 class="mb-4 text-warning">Select Your Seats</h2>
+
+  <div class="screen">SCREEN</div>
+  <div id="seatsContainer" class="text-center"></div>
+
+  <!-- Legend -->
+  <div class="legend text-center mt-4">
+    <p>
+      <span class="available-box"></span> Available
+      <span class="selected-box"></span> Selected
+      <span class="occupied-box"></span> Occupied
+    </p>
+  </div>
+
+  <div class="mt-4">
+    <h5>Selected Seats: <span id="count">0</span></h5>
+    <h5>Total Price: ₹<span id="total">0</span></h5>
+    <button class="btn btn-success btn-lg mt-3" onclick="confirmBooking()">Confirm Booking</button>
+  </div>
+</div>
+
+<script>
+  // Show back button on all pages except index.html
+  if (!window.location.pathname.endsWith("index.html")) {
+    document.getElementById("backBtnContainer").style.display = "block";
+  }
+
+  const seatsContainer = document.getElementById("seatsContainer");
+  const count  = document.getElementById("count");
+  const total  = document.getElementById("total");
+  const dateInput = document.getElementById("showDate");
+
+  const ticketPrice = 5;
+  let seatNumbers = [];
+
+  const rows = 8; // A–H
+  const cols = 15; // 1–15
+
+   // ✅ Disable past dates
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  const minDate = `${yyyy}-${mm}-${dd}`;
+  dateInput.setAttribute("min", minDate);
+
+
+  // Generate seats
+  for (let r = 0; r < rows; r++) {
+    for (let c = 1; c <= cols; c++) {
+      const seat = document.createElement("div");
+      seat.classList.add("seat");
+      const seatNumber = String.fromCharCode(65 + r) + c;
+      seat.dataset.seat = seatNumber;
+      seat.innerText = seatNumber;
+
+      // Random occupied
+      if (Math.random() < 0.2) seat.classList.add("occupied");
+
+      seat.addEventListener("click", () => {
+        if (!seat.classList.contains("occupied")) {
+          seat.classList.toggle("selected");
+          updateSelectedCount();
+        }
+      });
+
+      seatsContainer.appendChild(seat);
+    }
+    seatsContainer.appendChild(document.createElement("br"));
+  }
+
+  function updateSelectedCount() {
+    const selectedSeats = document.querySelectorAll(".seat.selected");
+    seatNumbers = Array.from(selectedSeats).map(s => s.dataset.seat);
+    count.textContent = seatNumbers.length;
+    total.textContent = seatNumbers.length * ticketPrice;
+  }
+
+  function requireDateAndSeats() {
+    if (!dateInput.value) {
+      alert("Please select a date!");
+      return false;
+    }
+    if (seatNumbers.length === 0) {
+      alert("Please select at least one seat!");
+      return false;
+    }
+    return true;
+  }
+
+  function confirmBooking() {
+    if (!requireDateAndSeats()) return;
+
+    const selectedDate = dateInput.value;
+    const amount = seatNumbers.length * ticketPrice;
+
+    localStorage.setItem("date", selectedDate);
+    localStorage.setItem("seats", seatNumbers.join(", "));
+    localStorage.setItem("seatsCount", seatNumbers.length);
+    localStorage.setItem("totalPrice", amount);
+
+    // Redirect
+    window.location.href = "confirmation.html";
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
