@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About ProductPro - Our Story</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* BASE & TYPOGRAPHY */
+        * {
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding-top: 80px; /* Space for fixed navbar */
+            background-color: #f7f9fc;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            color: #111827;
+            font-weight: 700;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* UTILITY CLASSES */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .primary-btn {
+            background-color: #4f46e5;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: inline-block;
+        }
+        .primary-btn:hover {
+            background-color: #4338ca;
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        /* ================= Navbar (Fixed & Elevated) ================= */
+		.navbar {
+		    display: flex;
+		    align-items: center;
+		    justify-content: space-between;
+		    background-color: #ffffff;
+		    padding: 1rem 2rem;
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    z-index: 1000;
+		    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+		}
+
+        .navbar .logo {
+            color: #111827;
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar .logo i {
+            color: #4f46e5;
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .navbar .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar .nav-links li a {
+            color: #4b5563;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .navbar .nav-links li a:hover,
+        .navbar .nav-links li a.active {
+            color: #4f46e5;
+        }
+        
+        .navbar .nav-links li a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #4f46e5;
+            border-radius: 2px;
+        }
+
+        .navbar .search-form {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .navbar .search-form input {
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            outline: none;
+            width: 200px;
+        }
+        
+        .navbar .search-form button {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            border: none;
+            background-color: #4f46e5;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ================= ABOUT HERO ================= */
+        .about-hero {
+            padding: 6rem 0 3rem;
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, #f0f4ff 100%);
+            border-bottom: 5px solid #4f46e5;
+        }
+        
+        .about-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+        
+        .about-hero p {
+            font-size: 1.25rem;
+            color: #4b5563;
+            max-width: 800px;
+            margin: 0.5rem auto 0;
+        }
+
+        /* ================= MISSION / VISION / VALUES ================= */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            margin: 0 auto;
+            max-width: 1280px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            border-top: 5px solid #4f46e5;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        
+        .card h3 {
+            color: #4f46e5;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card p {
+            color: #4b5563;
+        }
+
+        /* ================= TEAM SECTION ================= */
+        .team-section {
+            background-color: #ffffff;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .team-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .team-cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            flex: 0 0 250px;
+            background: #f7f9fc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .team-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+
+        .team-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 4px solid #4f46e5;
+            transition: border-color 0.3s;
+        }
+        
+        .team-card h4 {
+            margin: 0.5rem 0 0;
+            color: #111827;
+            font-weight: 600;
+        }
+        
+        .team-card p {
+            color: #4f46e5;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        /* ================= STATISTICS SECTION ================= */
+        .stats-section {
+            background-color: #111827;
+            padding: 3rem 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stat {
+            font-size: 1.2rem;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat span {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #4f46e5; /* Primary color highlight */
+            margin-bottom: 0.5rem;
+        }
+
+        /* ================= CTA SECTION ================= */
+        .cta-section {
+            padding: 4rem 2rem;
+            text-align: center;
+            background-color: #f7f9fc;
+        }
+
+        /* ================= Footer (Corporate) ================= */
+        footer {
+            background: #1f2937;
+            color: #9ca3af;
+            padding: 3rem 1rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        footer .social-icons a {
+            color: #9ca3af;
+            font-size: 1.3rem;
+            margin-left: 1.5rem;
+            transition: 0.3s;
+        }
+
+        footer .social-icons a:hover {
+            color: #4f46e5;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+            .navbar .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: space-around;
+            }
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+            .stats-container {
+                flex-direction: column;
+            }
+            .stat span {
+                font-size: 2.5rem;
+            }
+            .team-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar">
+        <div class="logo"><i class="fas fa-cube"></i> Product Pro</div>
+
+        <form th:action="@{/search}" method="get" class="search-form">
+            <input type="text" name="query" placeholder="Search ID or Name..." required>
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+
+        <ul class="nav-links">
+            <li><a th:href="@{/}">Platform</a></li>
+            <li><a th:href="@{/products}">Products</a></li>
+            <li><a th:href="@{/products/add}">Add New</a></li>
+            <li><a th:href="@{/about}" class="active">About</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="about-hero">
+    <div class="container">
+        <h1>Our Commitment to <span>Product Excellence</span></h1>
+        <p>ProductPro, an initiative of Pro**Product** Industries, was founded on the principle that powerful inventory management should be intuitive, intelligent, and accessible to the enterprise market.</p>
+    </div>
+</section>
+
+<section class="cards-container">
+    <div class="card">
+        <i class="fas fa-bullseye fa-2x"></i>
+        <h3>Our Mission</h3>
+        <p>To provide cutting-edge, data-driven solutions that simplify the complex logistics of **product lifecycle management** for global businesses, driving efficiency and profitability.</p>
+    </div>
+    <div class="card">
+        <i class="fas fa-eye fa-2x"></i>
+        <h3>Our Vision</h3>
+        <p>To establish ProductPro as the indispensable **gold standard** platform for integrated inventory tracking, dynamic pricing, and deep analytics worldwide.</p>
+    </div>
+    <div class="card">
+        <i class="fas fa-handshake fa-2x"></i>
+        <h3>Our Values</h3>
+        <p>We operate on principles of **Integrity**, **Innovation**, **Reliability**, and **Client Partnership**, ensuring mutual growth and trust in every feature we release.</p>
+    </div>
+</section>
+
+<section class="team-section">
+    <h2>Meet Our Leadership Team</h2>
+    <div class="team-cards">
+        <div class="team-card">
+           <img th:src="@{/images/1.jpg}" alt="Google MD">
+            <h4>Sashikumar Sreedharan</h4>
+            <p>CTO, Platform Development</p>
+        </div>
+        <div class="team-card">
+            <img th:src="@{/images/2.jpg}" alt="Microsoft MD">
+            <h4>Puneet Chandok</h4>
+            <p>Lead Architect, Backend</p>
+        </div>
+        <div class="team-card">
+            <img th:src="@{/images/3.jpg}" alt="Cognizant MD">
+            <h4>Rajesh Varrior</h4>
+            <p>Director, Product Design</p>
+        </div>
+    </div>
+</section>
+
+<section class="stats-section">
+    <div class="container">
+        <h2>Our Impact at a Glance</h2>
+        <div class="stats-container">
+            <div class="stat"><span>99.9%</span> Uptime SLA</div>
+            <div class="stat"><span>10K+</span> Products Managed</div>
+            <div class="stat"><span>$5M+</span> Annual Savings for Clients</div>
+            <div class="stat"><span>10+</span> Industry Compliance Certifications</div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <p style="font-size: 1.25rem; color: #111827; margin-bottom: 1.5rem;">Ready to transform your product operations?</p>
+    <a th:href="@{/contact}" class="primary-btn">
+        Schedule an Enterprise Demo <i class="fas fa-arrow-right"></i>
+    </a>
+</section>
+
+<footer>
+    <div class="footer-content">
+        <p>© 2025 ProductPro. All Rights Reserved. | Product**Pro** Industries Enterprise Solution.</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
